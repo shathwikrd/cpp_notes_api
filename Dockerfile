@@ -1,25 +1,30 @@
-# 1. Base image
 FROM ubuntu:24.04
 
-# 2. Install build deps
-RUN apt-get update && apt-get install -y \
+# Install required packages
+RUN apt update && apt install -y \
     g++ \
+    cmake \
     libboost-all-dev \
-    libnlohmann-json-dev \
     git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Grab Crow headers
-RUN git clone https://github.com/CrowCpp/Crow.git /usr/src/crow
-ENV CPLUS_INCLUDE_PATH=/usr/src/crow/include
+# Manually install nlohmann/json (header-only)
+RUN curl -L https://github.com/nlohmann/json/releases/latest/download/json.hpp -o /usr/local/include/json.hpp
 
-# 4. Copy your code
+# Install Crow (header-only)
+RUN git clone https://github.com/CrowCpp/crow.git && \
+    cd crow && mkdir build && cd build && cmake .. && make && make install
+
+# Copy your code
 WORKDIR /app
 COPY . .
 
-# 5. Compile
-RUN g++ -std=c++17 main.cpp -o cpp_notes_api -pthread -lboost_system
+# Build your project
+RUN cmake . && make
 
-# 6. Expose port & run
+# Expose port
 EXPOSE 18080
-CMD ["./cpp_notes_api"]
+
+# Run the API
+CMD ["./api"]

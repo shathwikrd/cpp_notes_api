@@ -1,30 +1,17 @@
-# Use official C++ image
-FROM gcc:13
+FROM gcc:12
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    cmake \
-    git \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+# Install CMake and other tools
+RUN apt-get update && \
+    apt-get install -y cmake git wget && \
+    apt-get clean
 
-# Set workdir
+# Copy project
 WORKDIR /app
-
-# Copy files
 COPY . .
-
-# Install crow and nlohmann/json headers
-RUN mkdir -p /usr/local/include/crow && \
-    wget https://raw.githubusercontent.com/CrowCpp/crow/master/include/crow.h -O /usr/local/include/crow/crow.h && \
-    wget https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -O /usr/local/include/nlohmann/json.hpp
-
 
 # Build
 RUN cmake . && make
 
-# Expose port
+# Expose port and run
 EXPOSE 18080
-
-# Run the app
 CMD ["./crow_api"]

@@ -3,7 +3,6 @@ project(crow_api)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(crow_api main.cpp)
+include_directories(. ./crow ./nlohmann)
 
-# Crow and nlohmann/json are header-only
-target_include_directories(crow_api PRIVATE /usr/local/include)
+add_executable(crow_api main.cpp)

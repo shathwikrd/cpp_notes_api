@@ -1,11 +1,10 @@
 services:
   - type: web
-    name: crow-api
+    name: cpp-crow-api
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
-    branch: main
-    healthCheckPath: /
+    autoDeploy: true
     envVars:
       - key: PORT
         value: 18080

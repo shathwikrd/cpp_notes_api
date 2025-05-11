@@ -16,8 +16,9 @@ COPY . .
 
 # Install crow and nlohmann/json headers
 RUN mkdir -p /usr/local/include/crow && \
-    wget https://raw.githubusercontent.com/CrowCpp/crow/v1.0/include/crow_all.h -O /usr/local/include/crow/crow.h && \
+    wget https://raw.githubusercontent.com/CrowCpp/crow/master/include/crow.h -O /usr/local/include/crow/crow.h && \
     wget https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -O /usr/local/include/nlohmann/json.hpp
+
 
 # Build
 RUN cmake . && make

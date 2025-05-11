@@ -1,18 +1,28 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y g++ cmake git libssl-dev
+RUN apt update && apt install -y \
+    g++ \
+    cmake \
+    git \
+    libboost-all-dev \
+    nlohmann-json3-dev
 
-# Copy source code
+# Create app directory
 WORKDIR /app
+
+# Copy everything into container
 COPY . .
 
-# Build the project
-RUN cmake . && make
+# Create a build directory
+RUN mkdir build
 
-# Expose the port Render expects
-EXPOSE 10000
+# Run cmake inside the build directory
+WORKDIR /app/build
+RUN cmake .. && make
 
-# Run the app (update port if needed)
-CMD ./cpp_notes_api
+# Expose the port used by your app
+EXPOSE 18080
+
+# Run the compiled binary
+CMD ["./cpp_notes_api"]

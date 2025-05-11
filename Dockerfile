@@ -1,17 +1,18 @@
-FROM gcc:12
+FROM ubuntu:22.04
 
-# Install CMake and other tools
+# Install dependencies
 RUN apt-get update && \
-    apt-get install -y cmake git wget && \
-    apt-get clean
+    apt-get install -y g++ cmake git libssl-dev
 
-# Copy project
+# Copy source code
 WORKDIR /app
 COPY . .
 
-# Build
+# Build the project
 RUN cmake . && make
 
-# Expose port and run
-EXPOSE 18080
-CMD ["./crow_api"]
+# Expose the port Render expects
+EXPOSE 10000
+
+# Run the app (update port if needed)
+CMD ./cpp_notes_api

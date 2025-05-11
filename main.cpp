@@ -2,6 +2,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <unordered_map>
+#include <cstdlib>
 
 using json = nlohmann::json;
 std::unordered_map<std::string, std::string> sessionMap;
@@ -187,5 +188,9 @@ int main()
         res["message"] = "Notes deleted";
         return crow::response(200, res); });
 
-    app.port(18080).multithreaded().run();
+    int port = 18080;
+    if (const char* env_p = std::getenv("PORT")) {
+        port = std::stoi(env_p);
+    }
+    app.port(port).multithreaded().run();
 }

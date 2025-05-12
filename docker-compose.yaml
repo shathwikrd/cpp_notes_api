@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  cpp-notes-api:
+    build: .
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./users.json:/app/users.json
+      - ./notes.json:/app/notes.json
+    restart: unless-stopped
